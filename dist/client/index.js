@@ -14,14 +14,34 @@ const trpc = (0, client_1.createTRPCClient)({
     links: [
         (0, client_1.httpBatchLink)({
             url: "http://localhost:3000",
+            headers() {
+                return __awaiter(this, void 0, void 0, function* () {
+                    return {
+                        Authorization: "Bearer 1"
+                    };
+                });
+            }
         }),
     ],
 });
+// async function main() {
+//   let response = await trpc.createTodo.mutate({
+//     title: "Go to gym",
+//     description: "Hit the gym",
+//   });
+//   console.log(response);
+// }
+// async function main() {
+//   let response = await trpc.signUp.mutate({
+//     email: "qwerty@gmail.com",
+//     password: "qwerty",
+//   });
+//   console.log(response);
+// }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         let response = yield trpc.createTodo.mutate({
-            title: "Go to gym",
-            description: "Hit the gym",
+            title: "qwerty@gmail.com",
         });
         console.log(response);
     });

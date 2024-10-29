@@ -17,19 +17,48 @@ const todoInputType = zod_1.z.object({
     description: zod_1.z.string(),
 });
 const appRouter = (0, trpc_1.router)({
-    createTodo: trpc_1.publicProcedure.input(todoInputType).mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("server pinned");
-        const title = opts.input.title;
-        const description = opts.input.description;
-        //do db here
+    // createTodo: publicProcedure.input(todoInputType).mutation(async (opts) => {
+    //   console.log("server pinned");
+    //   const title = opts.input.title;
+    //   const description = opts.input.description;
+    //   //do db here
+    //   return {
+    //     id: "1",
+    //     title: title,
+    //     description: description,
+    //   };
+    // }),
+    signUp: trpc_1.publicProcedure
+        .input(zod_1.z.object({
+        email: zod_1.z.string(),
+        password: zod_1.z.string(),
+    }))
+        .mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
+        let email = opts.input.email;
+        let password = opts.input.password;
+        //do db stuff
+        let token = "1213";
         return {
-            id: "1",
-            title: title,
-            description: description,
+            token,
         };
+    })),
+    createTodo: trpc_1.publicProcedure
+        .input(zod_1.z.object({
+        title: zod_1.z.string(),
+    }))
+        .mutation((opts) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(opts.ctx.username);
     })),
 });
 const server = (0, standalone_1.createHTTPServer)({
     router: appRouter,
+    createContext(opts) {
+        let authHeader = opts.req.headers["authorization"];
+        console.log(authHeader);
+        //jwt verify
+        return {
+            username: "qwerty",
+        };
+    },
 });
 server.listen(3000);
